@@ -1,0 +1,69 @@
+
+spring:
+  application:
+    name: msvc-items
+
+server:
+  port: ${PORT:0}
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${random.value}
+
+config:
+  base-url:
+    msvc-products: http://msvc-products
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  profiles:
+    active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
+
+configuracion:
+  texto: Developer
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      defecto:
+        sliding-window-size: 6
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 4
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+    instances:
+      items:
+        base-config: defecto
+  timelimiter:
+    configs:
+      defecto:
+        timeout-duration: 4s
+    instances:
+      items:
+        base-config: defecto     
+
+# resilience4j.circuitbreaker.configs.defecto.sliding-window-size=6
+# resilience4j.circuitbreaker.configs.defecto.failure-rate-threshold=50
+# resilience4j.circuitbreaker.configs.defecto.wait-duration-in-open-state=20s
+# resilience4j.circuitbreaker.configs.defecto.permitted-number-of-calls-in-half-open-state=4
+# resilience4j.circuitbreaker.configs.defecto.slow-call-rate-threshold=50
+# resilience4j.circuitbreaker.configs.defecto.slow-call-duration-threshold=2s
+# resilience4j.circuitbreaker.instances.items.base-config=defecto
+ 
+# resilience4j.timelimiter.configs.defecto.timeout-duration=2s
+# resilience4j.timelimiter.instances.items.base-config=defecto
+
+       
+
+
