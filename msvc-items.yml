@@ -12,7 +12,7 @@ eureka:
 
 config:
   base-url:
-    msvc-products: http://msvc-products
+    msvc-products: "http://ejemplo.com/products"
 
 eureka:
   client:
