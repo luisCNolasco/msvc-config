@@ -50,7 +50,7 @@ spring:
             fallbackUri: forward:/api/items/5
         - StripPrefix=2
         #- SampleCookie=Hola mi mensaje personalizado para productos!!!, user, Luis
-        - EjemploCookie=Hola mi mensaje personalizado para productos!!!, user, Luis
+        # - EjemploCookie=Hola mi mensaje personalizado para productos!!!, user, Luis
         #- name: SampleCookie
         #  args:
         #    message: Hola mi mensaje personalizado para productos!!!
@@ -63,7 +63,7 @@ spring:
         - Path=/api/items/**
         filters:
         - StripPrefix=2
-        - AddRequestHeader=token-request, cualquiera
-        - AddResponseHeader=token-response, 00000000
-        - AddRequestParameter=name, Luis
-        - SetResponseHeader=Content-Type, text/plain
+        # - AddRequestHeader=token-request, cualquiera
+        # - AddResponseHeader=token-response, 00000000
+        # - AddRequestParameter=name, Luis
+        # - SetResponseHeader=Content-Type, text/plain
