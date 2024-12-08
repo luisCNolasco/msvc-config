@@ -1,0 +1,69 @@
+server:
+  port: 8090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      defecto:
+        sliding-window-size: 6
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 4
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+    instances:
+      products:
+        base-config: defecto
+  timelimiter:
+    configs:
+      defecto:
+        timeout-duration: 4s
+    instances:
+      products:
+        base-config: defecto
+
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: msvc-products
+        uri: lb://msvc-products
+        predicates:
+        - Path=/api/products/**
+        # - Header=token, 12345
+        # - Header=token, \d+
+        # - Method=GET, POST
+        # - Query=color, verde
+        # - Query=color
+        # - Cookie=color, azul
+        # - Header=Content-Type, application/json
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: products
+            statusCodes: 500
+            fallbackUri: forward:/api/items/5
+        - StripPrefix=2
+        #- SampleCookie=Hola mi mensaje personalizado para productos!!!, user, Luis
+        - EjemploCookie=Hola mi mensaje personalizado para productos!!!, user, Luis
+        #- name: SampleCookie
+        #  args:
+        #    message: Hola mi mensaje personalizado para productos!!!
+        #    name: user
+        #    value: Luis
+      
+      - id: msvc-items
+        uri: lb://msvc-items
+        predicates:
+        - Path=/api/items/**
+        filters:
+        - StripPrefix=2
+        - AddRequestHeader=token-request, cualquiera
+        - AddResponseHeader=token-response, 00000000
+        - AddRequestParameter=name, Luis
+        - SetResponseHeader=Content-Type, text/plain
